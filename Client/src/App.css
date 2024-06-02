@@ -1,0 +1,13 @@
+
+*{
+  margin: 0;
+  padding: 0;
+}
+#remote-cursor{
+  position: absolute;
+  width: 16px;   height: 24px; 
+  background: url('/cursor.png') no-repeat center center;
+  background-size: contain;
+  pointer-events: none; 
+  z-index: 1000;
+}
