@@ -11,3 +11,6 @@
   pointer-events: none; 
   z-index: 1000;
 }
+.hero {
+  height: 25em; 
+}
