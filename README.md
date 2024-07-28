@@ -56,16 +56,24 @@ You can find the project repository on GitHub: [GitHub Project Link](https://git
 ## User Interface
 
 ### Co-Browser Login Screen
-![Co-Browser Login Screen](path-to-login-screen-image)
+![Screenshot 2024-07-28 134913](https://github.com/user-attachments/assets/e76d4d3a-76f3-4e33-a67e-9eb2f3d23a9f)
+
 
 ### Co-Browser Main UI
-![Co-Browser Main UI](path-to-main-ui-image)
+![Screenshot 2024-07-28 135011](https://github.com/user-attachments/assets/7884afeb-e0c8-4834-9122-0c90a3823967)
+![Screenshot 2024-07-28 135200](https://github.com/user-attachments/assets/ff93b84f-67cb-44b8-b7ad-32eac32d0b2b)
+
 
 ### Co-Browser Two Windows Layout
-![Co-Browser Two Windows Layout](path-to-two-windows-layout-image)
+![Screenshot 2024-07-28 135422](https://github.com/user-attachments/assets/4bc55ad1-f37e-4433-8db0-491f9946d75f)
+
 
 ### Co-Browser Video
-![Co-Browser Video](path-to-video)
+
+
+https://github.com/user-attachments/assets/bba21496-4b57-4545-bb69-53c4a5073de9
+
+
 
 ## Conclusion
 The development of a co-browsing extension is an ambitious project with significant potential for enhancing user support. While the current implementation has several hurdles, exploring BOM and optimizing the existing technologies could lead to substantial improvements. Continued research, experimentation, and iteration will be key to achieving the desired functionality and performance.
