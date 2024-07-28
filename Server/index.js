@@ -22,6 +22,7 @@ app.get("*", (req, res) => {
 });
 
 const sessions = {};
+const users = {};
 
 io.on("connection", (socket) => {
   console.log("a user connected with id:", socket.id);
@@ -29,9 +30,23 @@ io.on("connection", (socket) => {
   socket.on("join_session", (data) => {
     const { sessionId } = data;
 
-    sessions[sessionId] = socket.id;
+    if (!sessions[sessionId]) {
+      sessions[sessionId] = [];
+    }
+    sessions[sessionId].push(socket.id);
+    users[socket.id] = sessionId;
+
     console.log(`User with socket ID ${socket.id} joined session ${sessionId}`);
     socket.join(sessionId);
+
+    io.to(sessionId).emit("update_users", sessions[sessionId]);
+  });
+
+  socket.on("send_message", (data) => {
+    const { to, message } = data;
+    if (io.sockets.sockets[to]) {
+      io.sockets.sockets[to].emit("receive_message", { from: socket.id, message });
+    }
   });
 
   socket.on("mouse_move", (data) => {
@@ -76,6 +91,13 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
+
+    const sessionId = users[socket.id];
+    if (sessionId && sessions[sessionId]) {
+      sessions[sessionId] = sessions[sessionId].filter(id => id !== socket.id);
+      io.to(sessionId).emit("update_users", sessions[sessionId]);
+    }
+    delete users[socket.id];
   });
 });
 

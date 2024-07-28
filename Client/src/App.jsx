@@ -10,6 +10,10 @@ function App() {
   const [url, setUrl] = useState("http://www.example.com");
   const [buttonColor, setButtonColor] = useState("blue");
   const [buttonClicked, setButtonClicked] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const peerConnectionRef = useRef(null);
@@ -36,9 +40,21 @@ function App() {
     }
   };
 
+  const sendMessage = () => {
+    if (message.trim() && selectedUser) {
+      socket.emit("send_message", { to: selectedUser, message });
+      setMessages([...messages, { from: 'Me', message }]);
+      setMessage("");
+    }
+  };
+
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      console.log(data.message);
+      setMessages((prevMessages) => [...prevMessages, { from: data.from, message: data.message }]);
+    });
+
+    socket.on("update_users", (users) => {
+      setUsers(users);
     });
 
     socket.on("mouse_move", (data) => {
@@ -92,6 +108,7 @@ function App() {
 
     return () => {
       socket.off("receive_message");
+      socket.off("update_users");
       socket.off("mouse_move");
       socket.off("mouse_click");
       socket.off("url_change");
@@ -270,6 +287,42 @@ function App() {
             >
               Change Color
             </button>
+
+            <div className="chat-container mt-4">
+              <div className="users-list">
+                <h3>Available Users</h3>
+                <ul>
+                  {users.map((user, index) => (
+                    <li 
+                      key={index} 
+                      onClick={() => setSelectedUser(user)}
+                      className={`cursor-pointer ${selectedUser === user ? 'text-blue-500' : ''}`}
+                    >
+                      {user}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="chat-box">
+                <div className="messages">
+                  {messages.map((msg, index) => (
+                    <div key={index} className={`message ${msg.from === 'Me' ? 'self' : 'other'}`}>
+                      <strong>{msg.from}: </strong>{msg.message}
+                    </div>
+                  ))}
+                </div>
+                <div className="send-message">
+                  <input 
+                    type="text" 
+                    placeholder="Type a message" 
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="border p-2 w-full"
+                  />
+                  <button onClick={sendMessage} className="bg-blue-500 text-white py-2 px-4 mt-4 rounded">Send</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
